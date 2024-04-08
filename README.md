@@ -1,16 +1,9 @@
 # banao_notes_app
 
-A new Flutter project.
+A new Flutter project which is a 3rd shortlisting task of Banao Technology.
 
-## Getting Started
+In this task we have to build a Notes Application using Flutter Bloc package and proper repository pattern. In this we can perform CRUD (Create, Read, Update, Delete) operations. Users can log in with their email ids. The data will be stored in firebase.
 
-This project is a starting point for a Flutter application.
+Some screenshots from my project :-
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Home Screen
