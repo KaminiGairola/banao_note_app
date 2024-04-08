@@ -14,7 +14,6 @@ class home extends StatefulWidget {
 
   @override
   State<home> createState() => _HomeState();
-
 }
 
 class _HomeState extends State<home> {
@@ -22,14 +21,13 @@ class _HomeState extends State<home> {
   bool isLoading = true;
   List<Note> activeNotes = [];
   List<Note> archivedNotes = [];
-  bool isStaggered= true;
-  bool isSync=false;
+  bool isStaggered = true;
+  bool isSync = false;
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   Future createEntry(Note note) async {
     await NotesDatabase.instance.InsertEntry(note);
   }
-
 
   Future getAllNotes() async {
     LocalDataSaver.getImg().then((value) {
@@ -56,6 +54,7 @@ class _HomeState extends State<home> {
   Future updateOneNote(Note note) async {
     await NotesDatabase.instance.updateNote(note);
   }
+
   // Future deleteNote(int index) async {
   //   await NotesDatabase.instance.deleteNotes(activeNotes[index].id);
   // }
@@ -89,7 +88,6 @@ class _HomeState extends State<home> {
     });
   }
 
-
   @override
   void initState() {
     getAllNotes();
@@ -102,224 +100,136 @@ class _HomeState extends State<home> {
   Widget build(BuildContext context) {
     return isLoading
         ? Scaffold(
-      backgroundColor: bgColor,
-      body: Center(
-        child: CircularProgressIndicator(
-          color: white,
-        ),
-      ),
-    )
-        : Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const createNoteView()));
-        },
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-        backgroundColor: bgColor,
-        elevation: 1,
-        foregroundColor: white,
-        child: const Icon(
-          Icons.add,
-          size: 40,
-        ),
-      ),
-      endDrawerEnableOpenDragGesture: true,
-      key: _drawerKey,
-      drawer: const sideMenuBar(),
-      backgroundColor: bgColor,
-      body: RefreshIndicator(
-        onRefresh: () => Future.delayed(Duration(seconds: 1)),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    //Search container
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: black.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 3)
-                      ],
-                      borderRadius: BorderRadius.circular(10),
-                      color: cardColor,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                _drawerKey.currentState!.openDrawer();
-                              },
-                              child: Icon(
-                                Icons.menu,
-                                color: white,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                        const searchPage()));
-                              },
-                              child: Container(
-                                height: 50,
-                                width: 200,
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Search Your Notes",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: white.withOpacity(0.5)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        //second Row
-                        Container(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isStaggered=!isStaggered;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.grid_view,
-                                  color: white,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              CircleAvatar(
-                                onBackgroundImageError: (object,StackTrace){
-                                  print("ok");
-                                },
-                                radius: 19,
-                                backgroundImage: NetworkImage(
-                                  imageUrl.toString(),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  isStaggered?
-                  noteSectionAll():
-                  noteListSection(),
-
-
-                ],
+            backgroundColor: bgColor,
+            body: Center(
+              child: CircularProgressIndicator(
+                color: white,
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget noteSectionAll() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: Column(
-            children: [
-              Text(
-                "All",
-                style: TextStyle(
-                    color: white.withOpacity(0.5),
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          child: MasonryGridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: activeNotes.length,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            shrinkWrap: true,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
+          )
+        : Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            noteView(note: activeNotes[index])));
+                        builder: (context) => const createNoteView()));
               },
-              child: Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: white.withOpacity(0.4),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              backgroundColor: bgColor,
+              elevation: 1,
+              foregroundColor: white,
+              child: const Icon(
+                Icons.add,
+                size: 40,
+              ),
+            ),
+            endDrawerEnableOpenDragGesture: true,
+            key: _drawerKey,
+            drawer: const sideMenuBar(),
+            backgroundColor: bgColor,
+            body: RefreshIndicator(
+              onRefresh: () => Future.delayed(Duration(seconds: 1)),
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          //Search container
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: black.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 3)
+                            ],
+                            borderRadius: BorderRadius.circular(10),
+                            color: cardColor,
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      _drawerKey.currentState!.openDrawer();
+                                    },
+                                    child: Icon(
+                                      Icons.menu,
+                                      color: white,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const searchPage()));
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: 200,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Search Your Notes",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: white.withOpacity(0.5)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              //second Row
+                              Container(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    CircleAvatar(
+                                      onBackgroundImageError:
+                                          (object, StackTrace) {
+                                        print("ok");
+                                      },
+                                      radius: 19,
+                                      backgroundImage: NetworkImage(
+                                        imageUrl.toString(),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        noteListSection(),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      activeNotes[index].title,
-                      style: TextStyle(
-                          color: white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      activeNotes[index].content.length > 250
-                          ? "${activeNotes[index].content.substring(0, 250)}....."
-                          : activeNotes[index].content,
-                      style: TextStyle(color: white, fontSize: 18),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ],
-    );
+          );
   }
-
 
   Widget noteListSection() {
     return Column(
@@ -356,7 +266,7 @@ class _HomeState extends State<home> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 15),
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
                     border: Border.all(
                       color: white.withOpacity(0.4),
